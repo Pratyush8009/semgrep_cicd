@@ -1,0 +1,30 @@
+name: Semgrep SAST Scan
+
+# Trigger the scan on pushes or pull requests to the main branch
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  schedule:
+    - cron: '0 0 * * 1' # Runs automatically every Monday at midnight
+
+jobs:
+  semgrep:
+    name: Security Scan
+    runs-on: ubuntu-latest
+
+    # Skip scanning if the commit message contains [skip ci]
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+
+    container:
+      image: semgrep/semgrep:latest
+
+    steps:
+      # Step 1: Check out the repository code into the runner environment
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Run the Semgrep scan using the standard 'auto' configuration
+      - name: Run Semgrep Scan
+        run: semgrep scan --config auto
