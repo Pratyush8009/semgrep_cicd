@@ -9,7 +9,7 @@ app.get('/api/users', (req, res) => {
     const query = `SELECT * FROM users WHERE id = '${userId}'`; 
     
     console.log(`Executing query: ${query}`);
-    res.send(`Query executed: ${query}`);
+    res.send(`Query executed for this user: ${query}`);
 });
 
 app.get('/api/ping', (req, res) => {
